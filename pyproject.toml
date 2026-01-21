@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wic"
+version = "0.3.0"
+description = "OpenEmbedded Image Creator (wic) packaged as a standalone CLI"
+readme = "README.md"
+license = { text = "GPL-2.0-only" }
+authors = [{ name = "OpenEmbedded Contributors" }]
+requires-python = ">=3.8"
+classifiers = [
+  "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: System :: Archiving",
+]
+
+[project.scripts]
+wic = "wic.cli:main"
+
+[project.urls]
+Homepage = "https://www.yoctoproject.org/"
+Source = "https://git.openembedded.org/openembedded-core/"
+
+[tool.hatch.build]
+packages = ["src/wic", "src/oe"]
+include = [
+  "src/wic/canned-wks/**/*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wic", "src/oe"]
+include = [
+  "src/wic/canned-wks/**/*",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
