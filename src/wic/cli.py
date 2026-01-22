@@ -14,7 +14,7 @@
 # AUTHORS
 # Tom Zanussi <tom.zanussi (at] linux.intel.com>
 #
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 # Python Standard Library modules
 import os
