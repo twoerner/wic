@@ -24,6 +24,12 @@ Repository = "https://github.com/yoctoproject/wic"
 [project.scripts]
 wic = "wic.cli:main"
 
+[tool.hatch.build]
+packages = ["src/wic", "src/oe"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wic", "src/oe"]
+
 [build-system]
 requires = ["hatchling>=1.21"]
 build-backend = "hatchling.build"
