@@ -18,7 +18,7 @@ This packages the OpenEmbedded Image Creator (`wic`) as an installable Python CL
 
 - `src/wic/cli.py`: CLI entrypoint (formerly `scripts/wic`).
 - `src/wic/*`: core engine, plugins, and helpers.
-- `src/wic/canned-wks`: bundled kickstart templates.
+- `src/oe/*`: various oe-core helpers that were brought along and used in other parts of wic.
 
 ## Licensing
 
