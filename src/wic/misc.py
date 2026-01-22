@@ -218,7 +218,7 @@ class BitbakeVars(defaultdict):
         if image not in self:
             if not self.vars_dir:
                 raise WicError("BitBake environment not provided. "
-                               "Run 'bitbake -c do_rootfs_wicenv <image>' "
+                               "Run 'bitbake -c rootfs_wicenv <image>' "
                                "and pass --vars /path/to/<image>.env to wic.")
 
             env_source = self.vars_dir
@@ -239,7 +239,7 @@ class BitbakeVars(defaultdict):
                         image_key = os.path.splitext(env_files[0])[0]
                     elif not env_files:
                         raise WicError("No .env files found in %s. "
-                                       "Run 'bitbake -c do_rootfs_wicenv <image>' "
+                                       "Run 'bitbake -c rootfs_wicenv <image>' "
                                        "to generate one." % env_source)
                     else:
                         raise WicError("Multiple .env files found in %s. "
@@ -250,7 +250,7 @@ class BitbakeVars(defaultdict):
 
             if not fname or not os.path.isfile(fname):
                 raise WicError("Couldn't get bitbake variable %s from %s. "
-                               "Generate the vars file with 'bitbake -c do_rootfs_wicenv %s' "
+                               "Generate the vars file with 'bitbake -c rootfs_wicenv %s' "
                                "and pass it to wic using --vars." % (var, fname or env_source, image_key or "<image>"))
 
             with open(fname) as varsfile:

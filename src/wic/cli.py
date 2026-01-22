@@ -349,7 +349,7 @@ def wic_init_parser_create(subparser):
                       help="Do not change fstab file.")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
     subparser.add_argument("-D", "--debug", dest="debug", action="store_true",
                       default=False, help="output debug information")
     subparser.add_argument("-i", "--imager", dest="imager",
@@ -370,7 +370,7 @@ def wic_init_parser_list(subparser):
                              "defined inside the .wks file")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
     return
 
 def imgtype(arg):
@@ -403,7 +403,7 @@ def wic_init_parser_ls(subparser):
                            "e.g. core-image-sato")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
 
 def imgpathtype(arg):
     img = imgtype(arg)
@@ -423,7 +423,7 @@ def wic_init_parser_cp(subparser):
                            "e.g. core-image-sato")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
 
 def wic_init_parser_rm(subparser):
     subparser.add_argument("path", type=imgpathtype,
@@ -438,7 +438,7 @@ def wic_init_parser_rm(subparser):
                            "e.g. core-image-sato")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
 
 def expandtype(rules):
     """
@@ -485,7 +485,7 @@ def wic_init_parser_write(subparser):
                            "e.g. core-image-sato")
     subparser.add_argument("-v", "--vars", dest='vars_dir',
                       help="directory or file with <image>.env exported by "
-                           "bitbake do_rootfs_wicenv")
+                           "bitbake rootfs_wicenv")
 
 def wic_init_parser_help(subparser):
     helpparsers = subparser.add_subparsers(dest='help_topic', help=hlp.wic_usage)
@@ -549,7 +549,7 @@ def ensure_vars(args):
         return
     if args.command == "create" and not vars_dir:
         raise WicError("BitBake environment not provided. "
-                       "Run 'bitbake -c do_rootfs_wicenv <image>' and "
+                       "Run 'bitbake -c rootfs_wicenv <image>' and "
                        "pass --vars /path/to/<image>.env to wic.")
     if vars_dir:
         BB_VARS.vars_dir = vars_dir
