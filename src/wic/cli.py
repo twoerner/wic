@@ -356,6 +356,8 @@ def wic_init_parser_create(subparser):
                       default="direct", help="the wic imager plugin")
     subparser.add_argument("--extra-space", type=int, dest="extra_space",
                       default=0, help="additional free disk space to add to the image")
+    subparser.add_argument("--sector-size", type=int, default=512,
+                      help="override WIC_SECTOR_SIZE (bytes per sector). Default: 512")
     return
 
 
