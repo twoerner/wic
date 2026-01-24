@@ -10,6 +10,8 @@ import shutil
 import subprocess
 import os.path
 
+import bb
+
 def join(*paths):
     """Like os.path.join but doesn't treat absolute RHS specially"""
     return os.path.normpath("/".join(paths))
