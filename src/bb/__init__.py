@@ -10,4 +10,5 @@ def debug(level, msg):
     """
     logging.getLogger("bb").debug(msg)
 
-# The utils submodule is provided in bb.utils
+# Expose utils so callers can access bb.utils.mkdirhier
+from . import utils
