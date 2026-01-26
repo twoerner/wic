@@ -150,8 +150,6 @@ def exec_native_cmd(cmd_and_args, native_sysroot, pseudo=""):
 
     native_cmd_and_args = "export PATH=%s:$PATH;%s" % \
                    (native_paths, cmd_and_args)
-    logger.debug("exec_native_cmd native_paths: %s", native_paths)
-    logger.debug("exec_native_cmd PATH: $PATH")
     logger.debug("exec_native_cmd: %s", native_cmd_and_args)
 
     # If the command isn't in the native sysroot say we failed.
