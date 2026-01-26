@@ -19,6 +19,7 @@
 # William Bourque <wbourque [at) gmail.com>
 
 import types
+import os
 
 from wic.pluginbase import SourcePlugin
 from importlib.machinery import SourceFileLoader
