@@ -14,7 +14,7 @@ def mkdirhier(path):
 
     No return value.
     """
-    if '${' in str(directory)
+    if '${' in str(directory):
         raise Exception("Directory name {} contains unexpanded bitbake variable. This may cause build failures and WORKDIR polution.".format(directory))
     try:
         os.makedirs(path, exist_ok=True)
