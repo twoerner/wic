@@ -12,6 +12,7 @@
 #
 # Heavily inspired of bootimg_partition.py
 #
+# from oe-core/meta/lib/oe/bootfiles.py
 def get_boot_files(deploy_dir, boot_files):
     import re
     import os
