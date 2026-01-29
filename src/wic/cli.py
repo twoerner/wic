@@ -356,8 +356,6 @@ def wic_init_parser_create(subparser):
                       default="direct", help="the wic imager plugin")
     subparser.add_argument("--extra-space", type=int, dest="extra_space",
                       default=0, help="additional free disk space to add to the image")
-    subparser.add_argument("--sector-size", type=int, default=512,
-                      help="override WIC_SECTOR_SIZE (bytes per sector). Default: 512")
     return
 
 
@@ -533,8 +531,6 @@ def init_parser(parser):
         version="%(prog)s {version}".format(version=__version__))
     parser.add_argument("-D", "--debug", dest="debug", action="store_true",
         default=False, help="output debug information")
-    parser.add_argument("--sector-size", type=int, default=512,
-        help="override WIC_SECTOR_SIZE (bytes per sector). Default: 512")
 
     subparsers = parser.add_subparsers(dest='command', help=hlp.wic_usage)
     for subcmd in subcommands:
@@ -579,10 +575,6 @@ def main(argv=None):
             return 0
 
     ensure_vars(args)
-    # Highest priority for sector size: CLI value overrides BitBake/env
-    if hasattr(args, "sector_size") and args.sector_size:
-        from wic.misc import set_override_var
-        set_override_var("WIC_SECTOR_SIZE", str(args.sector_size))
 
     # validate wic cp src and dest parameter to identify which one of it is
     # image and cast it into imgtype

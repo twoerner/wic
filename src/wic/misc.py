@@ -188,8 +188,6 @@ class BitbakeVars(defaultdict):
         # default_image and vars_dir attributes should be set from outside
         self.default_image = None
         self.vars_dir = None
-        # optional CLI overrides for specific variables
-        self.overrides = {}
 
     def _parse_line(self, line, image, matcher=re.compile(r"^([a-zA-Z0-9\-_+./~]+)=(.*)")):
         """
@@ -210,9 +208,6 @@ class BitbakeVars(defaultdict):
         This is a lazy method, i.e. it runs bitbake or parses file only when
         only when variable is requested. It also caches results.
         """
-        if var in self.overrides:
-            return self.overrides[var]
-
         image = image or self.default_image
         image_key = image
         if image not in self:
@@ -272,12 +267,6 @@ class BitbakeVars(defaultdict):
 
 # Create BB_VARS singleton
 BB_VARS = BitbakeVars()
-
-def set_override_var(var, value):
-    """
-    Highest-priority override for a BitBake variable (used by CLI args).
-    """
-    BB_VARS.overrides[var] = value
 
 def get_bitbake_var(var, image=None, cache=True):
     """
