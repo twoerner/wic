@@ -20,7 +20,7 @@ import uuid
 
 from argparse import ArgumentParser, ArgumentError, ArgumentTypeError
 
-from wic.engine import find_canned
+from wic.engine import find_wks_file
 from wic.partition import Partition
 from wic.misc import get_bitbake_var
 
@@ -101,15 +101,15 @@ def overheadtype(arg):
 
     return result
 
-def cannedpathtype(arg, base_dir=None):
+def wkspathtype(arg, base_dir=None):
     """
     Custom type for ArgumentParser
     Tries to find file relative to the provided wks directory
     """
     wks_dir = os.path.abspath(base_dir or ".")
-    candidate = os.path.join(wks_dir, arg) if not os.path.isabs(arg) else arg
-    if os.path.exists(candidate):
-        return candidate
+    result = find_wks_file(wks_dir, arg)
+    if os.path.exists(result):
+        return result
     raise ArgumentTypeError("file not found: %s (searched in %s)" % (arg, wks_dir))
 
 def systemidtype(arg):
@@ -204,7 +204,7 @@ class KickStart():
         self.conf_dir = os.path.dirname(os.path.abspath(confpath))
 
         include = subparsers.add_parser('include')
-        include.add_argument('path', type=lambda p: cannedpathtype(p, self.conf_dir))
+        include.add_argument('path', type=lambda p: wkspathtype(p, self.conf_dir))
 
         self._parse(parser, confpath)
         if not self.bootloader:

@@ -45,58 +45,61 @@ def verify_build_env(vars_dir=None):
     return True
 
 
-CANNED_IMAGE_DIR = os.path.join("wic", "canned-wks")  # relative to layer roots
-WIC_DIR = "wic"
+WKS_DIR = "wic"
 
-def build_canned_image_list(path):
+def build_wks_search_list(path):
+    """
+    Build a list of directories to search for .wks files.
+    Searches each layer's top-level 'wic' directory from BBLAYERS and
+    also the local scripts_path/wic.
+    """
     layers_path = get_bitbake_var("BBLAYERS")
-    canned_wks_layer_dirs = []
+    wks_dirs = []
 
     if layers_path is not None:
         for layer_path in layers_path.split():
-            for wks_path in (CANNED_IMAGE_DIR, WIC_DIR, os.path.join(WIC_DIR, "canned-wks")):
-                cpath = os.path.join(layer_path, wks_path)
-                if os.path.isdir(cpath) and cpath not in canned_wks_layer_dirs:
-                    canned_wks_layer_dirs.append(cpath)
+            cpath = os.path.join(layer_path, WKS_DIR)
+            if os.path.isdir(cpath) and cpath not in wks_dirs:
+                wks_dirs.append(cpath)
 
-    packaged_canned = os.path.join(path, "canned-wks")
-    canned_wks_layer_dirs.append(packaged_canned)
+    packaged_wks = os.path.join(path, WKS_DIR)
+    if os.path.isdir(packaged_wks):
+        wks_dirs.append(packaged_wks)
 
-    return canned_wks_layer_dirs
+    return wks_dirs
 
-def find_canned_image(scripts_path, wks_file):
+def find_wks_image(scripts_path, wks_file):
     """
-    Find a .wks file with the given name in the canned files dir.
+    Find a .wks file with the given name in the discovered wks dirs.
 
     Return False if not found
     """
-    layers_canned_wks_dir = build_canned_image_list(scripts_path)
+    wks_dirs = build_wks_search_list(scripts_path)
 
-    for canned_wks_dir in layers_canned_wks_dir:
-        for root, dirs, files in os.walk(canned_wks_dir):
+    for wdir in wks_dirs:
+        for root, dirs, files in os.walk(wdir):
             for fname in files:
                 if fname.endswith("~") or fname.endswith("#"):
                     continue
                 if ((fname.endswith(".wks") and wks_file + ".wks" == fname) or \
                    (fname.endswith(".wks.in") and wks_file + ".wks.in" == fname)):
-                    fullpath = os.path.join(canned_wks_dir, fname)
-                    return fullpath
+                    return os.path.join(wdir, fname)
     return None
 
 
-def list_canned_images(scripts_path):
+def list_wks_images(scripts_path):
     """
-    List the .wks files in the canned image dir, minus the extension.
+    List the .wks files available, minus the extension.
     """
-    layers_canned_wks_dir = build_canned_image_list(scripts_path)
+    wks_dirs = build_wks_search_list(scripts_path)
 
-    for canned_wks_dir in layers_canned_wks_dir:
-        for root, dirs, files in os.walk(canned_wks_dir):
+    for wdir in wks_dirs:
+        for root, dirs, files in os.walk(wdir):
             for fname in files:
                 if fname.endswith("~") or fname.endswith("#"):
                     continue
                 if fname.endswith(".wks") or fname.endswith(".wks.in"):
-                    fullpath = os.path.join(canned_wks_dir, fname)
+                    fullpath = os.path.join(wdir, fname)
                     with open(fullpath) as wks:
                         for line in wks:
                             desc = ""
@@ -108,9 +111,9 @@ def list_canned_images(scripts_path):
                     print("  %s\t\t%s" % (basename.ljust(30), desc))
 
 
-def list_canned_image_help(scripts_path, fullpath):
+def list_wks_image_help(scripts_path, fullpath):
     """
-    List the help and params in the specified canned image.
+    List the help and params in the specified .wks file.
     """
     found = False
     with open(fullpath) as wks:
@@ -200,21 +203,21 @@ def wic_list(args, scripts_path):
 
     if args.list_type == "images":
 
-        list_canned_images(scripts_path)
+        list_wks_images(scripts_path)
         return True
     elif args.list_type == "source-plugins":
         list_source_plugins()
         return True
     elif len(args.help_for) == 1 and args.help_for[0] == 'help':
         wks_file = args.list_type
-        fullpath = find_canned_image(scripts_path, wks_file)
+        fullpath = find_wks_image(scripts_path, wks_file)
         if not fullpath:
             raise WicError("No image named %s found, exiting. "
                            "(Use 'wic list images' to list available images, "
                            "or specify a fully-qualified OE kickstart (.wks) "
                            "filename)" % wks_file)
 
-        list_canned_image_help(scripts_path, fullpath)
+        list_wks_image_help(scripts_path, fullpath)
         return True
 
     return False
@@ -645,21 +648,21 @@ def wic_write(args, native_sysroot):
     disk = Disk(args.image, native_sysroot, ('fat', 'ext', 'linux-swap'))
     disk.write(args.target, args.expand)
 
-def find_canned(scripts_path, file_name):
+def find_wks_file(scripts_path, file_name):
     """
-    Find a file either by its path or by name in the canned files dir.
+    Find a file either by its path or by name in the layer wks dirs.
 
     Return None if not found
     """
     if os.path.exists(file_name):
         return file_name
 
-    layers_canned_wks_dir = build_canned_image_list(scripts_path)
-    for canned_wks_dir in layers_canned_wks_dir:
-        for root, dirs, files in os.walk(canned_wks_dir):
+    wks_dirs = build_wks_search_list(scripts_path)
+    for wdir in wks_dirs:
+        for root, dirs, files in os.walk(wdir):
             for fname in files:
                 if fname == file_name:
-                    fullpath = os.path.join(canned_wks_dir, fname)
+                    fullpath = os.path.join(wdir, fname)
                     return fullpath
 
 def get_custom_config(boot_file):
@@ -671,7 +674,7 @@ def get_custom_config(boot_file):
     # Get the scripts path of poky
     scripts_path = os.path.abspath("%s/../.." % os.path.dirname(__file__))
 
-    cfg_file = find_canned(scripts_path, boot_file)
+    cfg_file = find_wks_file(scripts_path, boot_file)
     if cfg_file:
         with open(cfg_file, "r") as f:
             config = f.read()

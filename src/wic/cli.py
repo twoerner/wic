@@ -150,7 +150,7 @@ def wic_create_subcommand(options, usage_str):
     wks_file = options.wks_file
 
     if not wks_file.endswith(".wks"):
-        wks_file = engine.find_canned_image(scripts_path, wks_file)
+        wks_file = engine.find_wks_image(scripts_path, wks_file)
         if not wks_file:
             raise WicError("No image named %s found, exiting.  (Use 'wic list images' "
                            "to list available images, or specify a fully-qualified OE "

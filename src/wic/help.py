@@ -96,7 +96,7 @@ wic_usage = """
  Current 'wic' commands are:
     help              Show help for command or one of the topics (see below)
     create            Create a new OpenEmbedded image
-    list              List available canned images and source plugins
+    list              List available .wks images and source plugins
 
  Help topics:
     overview          wic overview - General overview of wic
@@ -227,14 +227,14 @@ wic_list_usage = """
         wic list <image> help
         wic list source-plugins
 
- This command enumerates the set of available canned images as well as
+ This command enumerates the set of available .wks images as well as
  help for those images.  It also can be used to list of available source
  plugins.
 
- The first form enumerates all the available 'canned' images.
+ The first form enumerates all the available .wks images.
 
  The second form lists the detailed help information for a specific
- 'canned' image.
+ .wks image.
 
  The third form enumerates all the available --sources (source
  plugins).
@@ -253,16 +253,14 @@ SYNOPSIS
     wic list source-plugins
 
 DESCRIPTION
-    This command enumerates the set of available canned images as well
+    This command enumerates the set of available .wks images as well
     as help for those images.  It also can be used to list available
     source plugins.
 
-    The first form enumerates all the available 'canned' images.
-    These are actually just the set of .wks files that have been moved
-    into the /scripts/lib/wic/canned-wks directory).
+    The first form enumerates all the available .wks images.
 
     The second form lists the detailed help information for a specific
-    'canned' image.
+    .wks image.
 
     The third form enumerates all the available --sources (source
     plugins).  The contents of a given partition are driven by code
@@ -619,7 +617,7 @@ DESCRIPTION
     OpenEmbedded build artifacts.  Image generation is driven by
     partitioning commands contained in an 'Openembedded kickstart'
     (.wks) file (see 'wic help kickstart') specified either directly
-    on the command-line or as one of a selection of canned .wks files
+    on the command-line or as one of a selection of .wks files
     (see 'wic list images').  When applied to a given set of build
     artifacts, the result is an image or set of images that can be
     directly written onto media and used on a particular system.
@@ -659,8 +657,8 @@ DESCRIPTION
 
     OE kickstart files (.wks) can of course be specified directly on
     the command-line, but the user can also choose from a set of
-    'canned' .wks files available via the 'wic list images' command
-    (example below).
+    .wks files available via the 'wic list images' command (example
+    below).
 
     In any case, the prerequisite for generating any image is to have
     the build artifacts already available.  The below examples assume
@@ -672,8 +670,8 @@ DESCRIPTION
 
       $ source oe-init-build-env
 
-    To start out with, we'll generate an image from one of the canned
-    .wks files.  The following generates a list of availailable
+    To start out with, we'll generate an image from one of the
+    available .wks files.  The following generates a list of availailable
     images:
 
       $ wic list images
@@ -719,7 +717,7 @@ DESCRIPTION
       $ wic help create
 
     So, the easiest way to create an image is to use the -e option
-    with a canned .wks file.  To use the -e option, you need to
+    with a .wks file.  To use the -e option, you need to
     specify the image used to generate the artifacts and you actually
     need to have the MACHINE used to build them specified in your
     local.conf (these requirements aren't necessary if you aren't
@@ -745,7 +743,7 @@ DESCRIPTION
       NATIVE_SYSROOT:  ...
 
       The image(s) were created using OE kickstart file:
-        .../scripts/lib/wic/canned-wks/directdisk.wks
+        directdisk.wks
 
     The output shows the name and location of the image created, and
     so that you know exactly what was used to generate the image, each
@@ -768,7 +766,7 @@ DESCRIPTION
       ...
 
     Here's an example that doesn't take the easy way out and manually
-    specifies each build artifact, along with a non-canned .wks file,
+    specifies each build artifact, along with a .wks file,
     and also uses the -o option to have wic create the output
     somewhere other than the default /var/tmp/wic:
 
@@ -1092,7 +1090,7 @@ DESCRIPTION
 
         --configfile: Specifies a user defined configuration file for
                       the bootloader. This file must be located in the
-                      canned-wks folder or could be the full path to the
+                      layer 'wic' folder or a full path to the
                       file. Using this option will override any other
                       bootloader option.
 
@@ -1118,8 +1116,7 @@ DESCRIPTION
          include <file>
 
       The <file> is either path to the file or its name. If name is
-      specified wic will try to find file in the directories with canned
-      .wks files.
+      specified wic will try to find file in layer 'wic' directories.
 
 """
 
@@ -1146,7 +1143,7 @@ Usage:  wic [--version]
 
 COMMAND:
 
-    list   -   List available canned images and source plugins
+    list   -   List available .wks images and source plugins
     ls     -   List contents of partitioned image or partition
     rm     -   Remove files or directories from the vfat or ext* partitions
     help   -   Show help for a wic COMMAND or TOPIC
@@ -1175,8 +1172,8 @@ Examples:
 
     $ wic list images
 
-    Returns the list of canned images (i.e. *.wks files located in
-    the /scripts/lib/wic/canned-wks directory.
+    Returns the list of available images (i.e. *.wks files located in
+    layer 'wic' directories).
 
 
     $ wic create mkefidisk -e core-image-minimal
